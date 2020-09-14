@@ -1,0 +1,29 @@
+@isTest
+private class TriggerTest {
+    @isTest static void TestInsertTask() {
+        // Test data setup
+        Task__c newTask = new Task__c (Name='Test Task 1');
+        // Perform test
+        Test.startTest();
+        Database.SaveResult result = Database.insert(newTask, false);
+        Test.stopTest();
+        // Verify
+        System.assert(result.isSuccess());
+        //get related Counter
+        Task__c[] newTaskWithCounter = [SELECT Id, (SELECT Name FROM Counters__r) FROM Task__c];
+        Counter__c[] newCounter = newTaskWithCounter[0].Counters__r;
+        System.assertEquals('Test Task 1 counter', newCounter[0].Name);
+     }
+    
+    @isTest static void TestErrorTask() {
+        // Test data setup
+        Task__c newTask = new Task__c (Name='Error');
+        // Perform test
+        Test.startTest();
+        Database.SaveResult result = Database.insert(newTask, false);
+        Test.stopTest();
+        // Verify
+        System.assert(!result.isSuccess());
+        System.assert(result.getErrors().size() > 0);
+     }
+}
