@@ -1,0 +1,28 @@
+global class MySchedule implements Schedulable {
+    global void execute(SchedulableContext ctx) {
+        
+        List <Task__c> taskUpdate = new List <Task__c> ();
+        List<Id> toAddresses = new List<Id>();
+        for (Task__c iter: [SELECT Status__c, PassTime__c  FROM Task__c]){
+            if (iter.Status__c !='Completed' && iter.PassTime__c>2){
+                iter.Status__c ='Completed';
+                toAddresses.add(iter.Owner.Id);
+            }
+        }
+        if (!taskUpdate.isEmpty()){
+            update taskUpdate;
+            
+            Messaging.reserveMassEmailCapacity(1);
+            Messaging.MassEmailMessage mail = new Messaging.MassEmailMessage();
+            EmailTemplate et=[Select id from EmailTemplate where name = 'EmailTemplatename' limit 1];
+
+            mail.setTargetObjectIds(toAddresses);
+            mail.setSenderDisplayName('From Task');
+            mail.setSubject('About new Task status');
+ 	    mail.setTemplateId(et.id);
+                            
+            Messaging.sendEmail(new Messaging.MassEmailMessage[] { mail });
+        }
+    }
+}    
+
