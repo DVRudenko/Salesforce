@@ -20,8 +20,9 @@ public class LinkTask {
          	 catch (Exception e){
             	Trigger_Handler_Error__c er = new Trigger_Handler_Error__c ();
             	er.ErrorType__c = e.getTypeName();
-           	    er.ErrorLine__c = e.getLineNumber();
+           	er.ErrorLine__c = e.getLineNumber();
             	er.ErrorMessage__c = e.getMessage();
+		insert er;
         	}
     	}
     }
