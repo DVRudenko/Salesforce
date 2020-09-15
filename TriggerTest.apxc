@@ -26,3 +26,4 @@ private class TriggerTest {
         System.assert(newCounter.isEmpty());
      }
 }
+ 
