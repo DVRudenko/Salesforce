@@ -1,14 +1,13 @@
 <aura:component>
-    <aura:attribute name="today" type="Date" />
-    <p>	Local time is {!v.today} </p>
+    <aura:attribute name="localTime" type="Date" />
+    <p>	Your local time is {!v.localTime} </p>
   
     <lightning:input aura:id="zone"
                      type="Decimal" 
-                     label="Enter Time Zone:"
-                     name="timeZone"/>
+                     label="Enter your time zone:"
+                     name="userZone"/>
         
    <lightning:button label="Show local time"
             	     onclick="{!c.init}"/>
-    
     
 </aura:component>
