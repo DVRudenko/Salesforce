@@ -1,12 +1,18 @@
 ({
     init : function(component, event, helper) {
-    	var time = new Date();
-    	//var zone = component.get("v.timeZone");
-    	//time.setHours( time.getHours() + zone);
+    
+    var localZone = component.find("zone").get("v.value");
+    localZone = parseInt(localZone, 10);
         
-    	time.setHours( time.getHours() + 3);
+    if (isNaN(localZone)){
+        console.log('Wrong localZone');
         
-    	var today = $A.localizationService.formatDateTime(time);
-    	component.set('v.today', today);
-}
+     } else {
+        var time = new Date();
+	    var offset = time.getTimezoneOffset()/60;
+    	time.setHours( time.getHours() + offset + localZone);
+    	var localTime = $A.localizationService.formatDateTime(time);
+    	component.set('v.localTime', localTime);
+     	}
+     }
 })
